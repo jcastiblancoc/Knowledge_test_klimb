@@ -43,3 +43,6 @@ Once you have the project configured, run in the /src directory:
 
 and open the route in a web browser to navigate inside the project.
 
+This is the Swagger UI documentation of the API:
+your_url:port/docs#/default
+
