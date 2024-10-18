@@ -1,0 +1,43 @@
+<!-- templates/investor_dashboard.html -->
+{% extends "base.html" %}
+
+{% block title %}Inversor Dashboard{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Bienvenido, Inversor</h1>
+    <p class="lead">Explora operaciones disponibles y realiza ofertas.</p>
+    <hr class="my-4">
+</div>
+
+<div class="list-group">
+    <a href="/investor/operations" class="list-group-item list-group-item-action">Ver Operaciones Disponibles</a>
+    <a href="/investor/my-bids" class="list-group-item list-group-item-action">Mis Ofertas</a>
+</div>
+
+<a href="/logout" class="btn btn-danger mt-3">Cerrar sesión</a>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            const response = await fetch('/investor_dashboard', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.status === 401 || response.status === 403) {
+                alert('No tienes acceso o tu sesión ha expirado.');
+                window.location.href = '/index';
+            } else {
+                console.log("Dashboard cargado correctamente");
+            }
+        } catch (error) {
+            alert('Ocurrió un error al intentar cargar el dashboard.');
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Bienvenido, Administrador</h1>
+    <p class="lead">Este es el panel de control del administrador.</p>
+    <hr class="my-4">
+</div>
+
+<div class="list-group">
+    <a href="/admin/users" class="list-group-item list-group-item-action">Gestionar Usuarios</a>
+    <a href="/admin/operations" class="list-group-item list-group-item-action">Gestionar Operaciones</a>
+    <a href="/admin/bids" class="list-group-item list-group-item-action">Gestionar Ofertas</a>
+</div>
+
+<a href="/logout" class="btn btn-danger mt-3">Cerrar sesión</a>
+{% endblock %}

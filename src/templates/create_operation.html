@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Nueva Operación{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Crear Nueva Operación</h1>
+    <form id="createOperationForm" method="post">
+        <div class="form-group">
+            <label for="requiredAmount">Monto Requerido</label>
+            <input type="number" class="form-control" id="requiredAmount" name="required_amount" required>
+        </div>
+        <div class="form-group">
+            <label for="annualInterest">Tasa de Interés (%)</label>
+            <input type="number" class="form-control" id="annualInterest" name="annual_interest" required>
+        </div>
+        <div class="form-group">
+            <label for="deadline">Fecha Límite</label>
+            <input type="date" class="form-control" id="deadline" name="deadline" required>
+        </div>
+        <div class="form-group">
+            <label for="currentAmount">Monto Actual</label>
+            <input type="number" class="form-control" id="currentAmount" name="current_amount" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Operación</button>
+    </form>
+    <a href="/operator/operations" class="btn btn-secondary mt-3">Listar Operaciones</a>
+    <a href="/operator_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
+    <a href="/index" class="btn btn-danger mt-3">Cerrar sesión</a>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('createOperationForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const requiredAmount = parseFloat(document.getElementById('requiredAmount').value);
+            const annualInterest = parseFloat(document.getElementById('annualInterest').value);
+            const deadlineInput = document.getElementById('deadline').value;
+            const currentAmount = parseFloat(document.getElementById('currentAmount').value);
+
+            const token = getCookie('token');
+            const data = {
+                required_amount: requiredAmount,
+                annual_interest: annualInterest,
+                deadline: deadlineInput,
+                current_amount: currentAmount
+            };
+            try {
+                const response = await fetch('/operator/create-operation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Operación creada exitosamente.');
+                } else {
+                    const result = await response.json();
+                    alert('Error al crear la operación: ' + result.detail);
+                }
+            } catch (error) {
+                alert('Ocurrió un error al enviar los datos.');
+            }
+        });
+    });
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            return parts.pop().split(';').shift();
+        }
+    }
+</script>
+{% endblock %}

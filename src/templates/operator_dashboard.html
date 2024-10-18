@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Operador Dashboard{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Bienvenido, Operador</h1>
+    <p class="lead">Crea y gestiona tus operaciones financieras.</p>
+    <hr class="my-4">
+</div>
+
+<div class="text-center mb-4">
+    <a href="/operator/create-operation" class="btn btn-primary btn-lg mx-2">Crear Nueva Operación</a>
+    <a href="/operator/operations" class="btn btn-secondary btn-lg mx-2">Listar Operaciones Activas</a>
+</div>
+
+<a href="/index" class="btn btn-danger mt-3">Cerrar sesión</a>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            const response = await fetch('/operator_dashboard', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.status === 401 || response.status === 403) {
+                alert('No tienes acceso o tu sesión ha expirado.');
+                window.location.href = '/index';
+            } else {
+                console.log("Dashboard cargado correctamente");
+            }
+        } catch (error) {
+            alert('Ocurrió un error al intentar cargar el dashboard.');
+        }
+    });
+</script>
+{% endblock %}

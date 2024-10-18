@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Hacer una Oferta{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Hacer una Oferta</h1>
+    <form id="offerForm">
+        <div class="mb-3">
+            <label for="operationId" class="form-label">ID de la Operación</label>
+            <input type="text" class="form-control" id="operationId" name="operation_id" required>
+        </div>
+        <div class="mb-3">
+            <label for="offerAmount" class="form-label">Monto de la Oferta</label>
+            <input type="number" class="form-control" id="offerAmount" name="offer_amount" required>
+        </div>
+        <div class="mb-3">
+            <label for="interestRate" class="form-label">Tasa de Interés</label>
+            <input type="number" class="form-control" id="interestRate" name="interest_rate" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Oferta</button>
+    </form>
+    <a href="/investor_dashboard" class="btn btn-secondary mt-3">Regresar al Dashboard</a>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('offerForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/investor/make-offer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert('Oferta enviada');
+                this.reset();
+            } else {
+                alert('Error al enviar la oferta');
+            }
+        } catch (error) {
+            alert('Ocurrió un error al enviar la oferta.');
+        }
+    });
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/index.css') }}">
+</head>
+<body>
+    <div class="background-decor" style="background-image: url('{{ url_for('static', path='images/background.png') }}');">
+    </div>
+
+    <div class="container">
+        <h2>Knowledge Test Klimb</h2>
+        <form id="loginForm">
+            <div class="input-box">
+                <input type="email" name="username" placeholder="Email" required />
+            </div>
+            <div class="input-box">
+                <input type="password" name="password" placeholder="Password" required />
+            </div>
+            <button type="submit" class="btn">Iniciar Sesión</button>
+        </form>
+
+        <div class="social-buttons">
+            <div class="social-button">
+                <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google" />
+            </div>
+            <div class="social-button">
+                <img src="https://img.icons8.com/ios-filled/50/facebook-new.png" alt="Facebook" />
+            </div>
+            <div class="social-button">
+                <img src="https://img.icons8.com/ios-filled/50/mac-os.png" alt="Apple" />
+            </div>
+        </div>
+        <div class="signup-text">
+            No tienes una cuenta? <a href="/register">Registrate</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const username = formData.get('username');
+            const password = formData.get('password');
+
+            try {
+                const response = await fetch('/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'username': username,
+                        'password': password
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.cookie = `token=${data.token}; path=/;`;
+                    document.cookie = `role=${data.role}; path=/;`;
+
+                    if (data.role === 'Operator') {
+                        window.location.href = '/operator_dashboard';
+                    } else if (data.role === 'Admin') {
+                        window.location.href = '/admin_dashboard';
+                    } else if (data.role === 'Investor') {
+                        window.location.href = '/investor_dashboard';
+                    }
+                } else {
+                    alert("Error: Credenciales incorrectas");
+                }
+            } catch (error) {
+                alert("Ocurrió un error al intentar iniciar sesión");
+            }
+        });
+    </script>
+    
+</body>
+</html>
