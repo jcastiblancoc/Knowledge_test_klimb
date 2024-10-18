@@ -14,7 +14,7 @@
     <a href="/operator/operations" class="btn btn-secondary btn-lg mx-2">Listar Operaciones Activas</a>
 </div>
 
-<a href="/index" class="btn btn-danger mt-3">Cerrar sesión</a>
+<button id="logout-button" class="btn btn-danger mt-3">Cerrar sesión</button>
 
 {% endblock %}
 
@@ -38,6 +38,19 @@
         } catch (error) {
             alert('Ocurrió un error al intentar cargar el dashboard.');
         }
+        document.getElementById('logout-button').addEventListener('click', async function() {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                alert("Sesión cerrada correctamente");
+                window.location.href = '/index';
+            } else {
+                alert("Error al cerrar sesión");
+            }
+        });
     });
 </script>
 {% endblock %}

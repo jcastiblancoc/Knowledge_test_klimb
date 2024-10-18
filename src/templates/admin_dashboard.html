@@ -11,9 +11,25 @@
 
 <div class="list-group">
     <a href="/admin/users" class="list-group-item list-group-item-action">Gestionar Usuarios</a>
-    <a href="/admin/operations" class="list-group-item list-group-item-action">Gestionar Operaciones</a>
-    <a href="/admin/bids" class="list-group-item list-group-item-action">Gestionar Ofertas</a>
 </div>
 
-<a href="/logout" class="btn btn-danger mt-3">Cerrar sesión</a>
+<button onclick="logout()" class="btn btn-danger mt-3">Cerrar sesión</button>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('logout-button').addEventListener('click', async function() {
+        const response = await fetch('/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            alert("Sesión cerrada correctamente");
+            window.location.href = '/index';
+        } else {
+            alert("Error al cerrar sesión");
+        }
+    });
+</script>
 {% endblock %}

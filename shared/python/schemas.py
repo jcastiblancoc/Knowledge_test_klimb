@@ -28,3 +28,9 @@ class OperationCreateRequest(BaseModel):
 
 class OperationUpdateRequest(BaseModel):
     operation_id: str
+
+
+class BidRequest(BaseModel):
+    operation_id: str
+    invested_amount: float
+    interest_rate: float

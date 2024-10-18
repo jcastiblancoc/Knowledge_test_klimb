@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Usuarios{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Lista de Usuarios</h1>
+    <a href="/admin_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
+    <button id="logout-button" class="btn btn-danger mt-3">Cerrar sesión</button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}
+                <td>
+                    <button class="btn btn-danger" onclick="deleteUser('{{ user.id }}')">Eliminar</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Añadir Usuario</h3>
+    <form id="addUserForm" class="mt-4">
+        <div class="mb-3">
+            <label for="first_name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Nombre" required>
+        </div>
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Apellido" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Teléfono" required>
+        </div>
+        <div class="mb-3">
+            <label for="nickname" class="form-label">Nickname</label>
+            <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Nickname" required>
+        </div>
+        <div class="mb-3">
+            <label for="country" class="form-label">País</label>
+            <input type="text" class="form-control" id="country" name="country" placeholder="País" required>
+        </div>
+        <div class="mb-3">
+            <label for="state" class="form-label">Estado</label>
+            <input type="text" class="form-control" id="state" name="state" placeholder="Estado" required>
+        </div>
+        <div class="mb-3">
+            <label for="city" class="form-label">Ciudad</label>
+            <input type="text" class="form-control" id="city" name="city" placeholder="Ciudad" required>
+        </div>
+        <div>
+        <label for="role">Rol:</label>
+        <select name="role" id="role" class="form-control" required>
+            <option value="" disabled selected>Selecciona un rol</option>
+            <option value="Admin">Admin</option>
+            <option value="Operador">Operador</option>
+            <option value="Inversor">Inversor</option>
+        </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Añadir Usuario</button>
+    </form>
+    
+</div>
+<a href="/operator_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
+<button id="logout-button" class="btn btn-danger mt-3">Cerrar sesión</button>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('addUserForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+        
+        const response = await fetch('/admin/users/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            alert("Usuario añadido exitosamente");
+            location.reload();
+        } else {
+            alert("Error al añadir usuario");
+        }
+    });
+
+    async function deleteUser(userId) {
+        const response = await fetch(`/admin/users/delete/${userId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert("Usuario eliminado exitosamente");
+            location.reload(); // Recargar la página para actualizar la lista
+        } else {
+            alert("Error al eliminar usuario");
+        }
+    }
+</script>
+<script>
+    document.getElementById('logout-button').addEventListener('click', async function() {
+        const response = await fetch('/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            alert("Sesión cerrada correctamente");
+            window.location.href = '/index';
+        } else {
+            alert("Error al cerrar sesión");
+        }
+    });
+</script>
+{% endblock %}

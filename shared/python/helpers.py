@@ -67,15 +67,12 @@ def get_current_user(token: str):
         return user
     except JWTError:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")
-    
-def convert_operation_to_dict(op):
-    op_dict = {}
-    for key, value in op.__dict__.items():
-        if isinstance(value, Decimal):
-            op_dict[key] = float(value)  # Convert Decimal to float
-        elif isinstance(value, date):
-            op_dict[key] = value.isoformat()  # Convert date to string
-        elif not key.startswith('_'):  # Exclude internal attributes like _sa_instance_state
-            op_dict[key] = value
+
+
+def get_user_by_email(email: str) -> User:
+    return session.query(User).filter(User.email == email).first()
+
+def get_user_by_id(user_id: str) -> User:
+    return session.query(User).filter(User.id == user_id).first()
 
 

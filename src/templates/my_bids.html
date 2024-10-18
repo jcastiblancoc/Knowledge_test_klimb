@@ -1,0 +1,53 @@
+<!-- templates/my_bids.html -->
+{% extends "base.html" %}
+
+{% block title %}Mis Ofertas{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Mis Ofertas</h1>
+    <a href="/operator_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
+    <button id="logout-button" class="btn btn-danger mt-3">Cerrar sesión</button>
+
+    <div id="bids-list" class="container">
+        {% if bids %}
+            {% for bid in bids %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Operación: {{ bid.operation.required_amount }} - Fecha Limite: {{ bid.operation.deadline }}
+                    </h5>
+                    <p><strong>Monto Invertido:</strong> {{ bid.invested_amount }}</p>
+                    <p><strong>Tasa de Interés:</strong> {{ bid.interest_rate }}%</p>
+                    <p><strong>Estado de la Operación:</strong> {{ bid.operation.status }}</p>
+                    <p><strong>Fecha de Oferta:</strong> {{ bid.bid_date.strftime('%d-%m-%Y') }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No has realizado ninguna oferta.</p>
+        {% endif %}
+    </div>
+
+    <a href="/investor_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
+    <button onclick="logout()" class="btn btn-danger mt-3">Cerrar sesión</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('logout-button').addEventListener('click', async function() {
+        const response = await fetch('/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            alert("Sesión cerrada correctamente");
+            window.location.href = '/index';
+        } else {
+            alert("Error al cerrar sesión");
+        }
+    });
+</script>
+{% endblock %}

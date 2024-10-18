@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     <a href="/operator_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
-    <a href="/index" class="btn btn-danger mt-3">Cerrar sesión</a>
+    <button id="logout-button" class="btn btn-danger mt-3">Cerrar sesión</button>
     <h1 class="mt-5">Operaciones Activas</h1>
     <div id="operations-list" class="container">
         {% for operation in operations %}
@@ -24,7 +24,7 @@
         {% endfor %}
     </div>
     <a href="/operator_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
-    <a href="/index" class="btn btn-danger mt-3">Cerrar sesión</a>
+    <button id="logout-button" class="btn btn-danger mt-3">Cerrar sesión</button>
 </div>
 {% endblock %}
 
@@ -66,6 +66,22 @@
                 updateStatus(operationId);
             });
         });
+    });
+</script>
+
+<script>
+    document.getElementById('logout-button').addEventListener('click', async function() {
+        const response = await fetch('/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            alert("Sesión cerrada correctamente");
+            window.location.href = '/index';
+        } else {
+            alert("Error al cerrar sesión");
+        }
     });
 </script>
 {% endblock %}
