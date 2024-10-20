@@ -74,16 +74,16 @@
         <select name="role" id="role" class="form-control" required>
             <option value="" disabled selected>Selecciona un rol</option>
             <option value="Admin">Admin</option>
-            <option value="Operador">Operador</option>
-            <option value="Inversor">Inversor</option>
+            <option value="Operator">Operador</option>
+            <option value="Investor">Inversor</option>
         </select>
         </div>
 
         <button type="submit" class="btn btn-primary">Añadir Usuario</button>
     </form>
-    
+
 </div>
-<a href="/operator_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
+<a href="/admin_dashboard" class="btn btn-primary mt-3">Regresar al Dashboard</a>
 <button id="logout-button" class="btn btn-danger mt-3">Cerrar sesión</button>
 
 {% endblock %}
@@ -94,7 +94,7 @@
         event.preventDefault();
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
-        
+
         const response = await fetch('/admin/users/add', {
             method: 'POST',
             headers: {
@@ -102,7 +102,7 @@
             },
             body: JSON.stringify(data)
         });
-        
+
         if (response.ok) {
             alert("Usuario añadido exitosamente");
             location.reload();
@@ -118,7 +118,7 @@
 
         if (response.ok) {
             alert("Usuario eliminado exitosamente");
-            location.reload(); // Recargar la página para actualizar la lista
+            location.reload();
         } else {
             alert("Error al eliminar usuario");
         }

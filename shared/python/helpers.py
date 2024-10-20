@@ -26,12 +26,10 @@ def logger():
 logger_info = logger()
 
 def get_pwd_context():
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    return pwd_context
+    return CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_oauth2_scheme():
-    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-    return oauth2_scheme
+    return OAuth2PasswordBearer(tokenUrl="token")
 
 def get_password_hash(password: str) -> str:
     pwd_context = get_pwd_context()
@@ -47,9 +45,8 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)  # Usa timezone.utc
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    to_encode["exp"] = expire
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def get_current_user(token: str):
     if token is None:
@@ -60,7 +57,7 @@ def get_current_user(token: str):
         email: str = payload.get("sub")
         if email is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-        # Aquí debes buscar al usuario en la base de datos con user_id
+
         user = session.query(User).where(User.email == email).first()
         if user is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
