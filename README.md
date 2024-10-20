@@ -46,3 +46,23 @@ and open the route in a web browser to navigate inside the project.
 This is the Swagger UI documentation of the API:
 your_url:port/docs#/default
 
+
+If you want to see how it works, enter the following in your browser: http://3.129.58.93:8000/index
+
+It’s stored on an AWS EC2 instance, and it works!
+
+The admin user is the only account created when the app is first executed.
+
+Admin user: admin@admin.com
+Password: admin
+
+Additionally, I have stored two more users in the database:
+
+Username: inversor@gmail.com
+Password: inversor
+
+Username: operador@gmail.com
+Password: operador
+
+
+
